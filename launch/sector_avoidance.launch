@@ -1,0 +1,43 @@
+<launch>
+  <!-- I/O -->
+  <arg name="input_topic"  default="/mid360_avoidance/filtered"/>
+  <arg name="output_topic" default="/mid360_avoidance/avoid_vec"/>
+
+  <!-- Core -->
+  <arg name="sectors"      default="9"/>
+  <arg name="k_nearest"    default="3"/>
+  <arg name="fov_deg"      default="180.0"/>
+  <arg name="d_safe"       default="2.0"/>
+  <arg name="beta"         default="2.0"/>
+  <arg name="max_avoid"    default="1.0"/>
+  <arg name="ema_alpha"    default="0.3"/>
+  <arg name="publish_rate_hz" default="20.0"/>
+  <arg name="frame_id"     default="body"/>
+
+  <!-- Debug RViz -->
+  <arg name="debug_enable"   default="true"/>
+  <arg name="debug_scale"    default="1.0"/>   <!-- meters per unit -->
+  <arg name="debug_alpha"    default="0.9"/>
+  <arg name="debug_lifetime" default="0.2"/>
+  <arg name="debug_ns"       default="sector_avoid"/>
+
+  <node pkg="mid360_avoidance" type="sector_avoidance" name="sector_avoidance" output="screen">
+    <param name="input_topic"  value="$(arg input_topic)"/>
+    <param name="output_topic" value="$(arg output_topic)"/>
+    <param name="sectors"      value="$(arg sectors)"/>
+    <param name="k_nearest"    value="$(arg k_nearest)"/>
+    <param name="fov_deg"      value="$(arg fov_deg)"/>
+    <param name="d_safe"       value="$(arg d_safe)"/>
+    <param name="beta"         value="$(arg beta)"/>
+    <param name="max_avoid"    value="$(arg max_avoid)"/>
+    <param name="ema_alpha"    value="$(arg ema_alpha)"/>
+    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
+    <param name="frame_id"     value="$(arg frame_id)"/>
+
+    <param name="debug_enable"   value="$(arg debug_enable)"/>
+    <param name="debug_scale"    value="$(arg debug_scale)"/>
+    <param name="debug_alpha"    value="$(arg debug_alpha)"/>
+    <param name="debug_lifetime" value="$(arg debug_lifetime)"/>
+    <param name="debug_ns"       value="$(arg debug_ns)"/>
+  </node>
+</launch>

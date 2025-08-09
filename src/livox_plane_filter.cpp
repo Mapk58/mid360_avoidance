@@ -232,7 +232,7 @@ private:
 };
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "mid360_avoidance");
+  ros::init(argc, argv, "plane_filter");
   ros::NodeHandle nh;
   ros::NodeHandle pnh("~");
   PlaneFilterNode node(nh, pnh);
