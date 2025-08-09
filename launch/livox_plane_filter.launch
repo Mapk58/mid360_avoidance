@@ -1,0 +1,44 @@
+<launch>
+  <!-- Topics -->
+  <arg name="input_topic"  default="/livox/lidar"/>
+  <arg name="output_topic" default="~/filtered"/>
+
+  <!-- Publishing -->
+  <arg name="publish_rate_hz" default="5.0"/>
+  <arg name="frame_id"        default="body"/>
+  <arg name="max_points_per_publish" default="120000"/>
+  <arg name="window_sec"      default="0.0"/>
+
+  <!-- Geometry / filters -->
+  <arg name="angle_deg"   default="-11.0"/>
+  <arg name="thickness"   default="0.1"/>
+  <arg name="min_range"   default="0.3"/>
+  <arg name="max_range"   default="15.0"/>
+  <arg name="front_only"  default="true"/>
+
+  <!-- Random ring subsample -->
+  <arg name="decimation"  default="15"/>     <!-- keep_prob by default = 1/decimation -->
+  <arg name="keep_prob"   default="-1.0"/>   <!-- less than zero => will use 1/decimation -->
+  <arg name="ring_len"    default="200000"/>
+  <arg name="seed"        default="42"/>
+
+  <node pkg="mid360_avoidance" type="mid360_avoidance_node" name="mid360_avoidance" output="screen">
+    <remap from="~filtered" to="$(arg output_topic)"/>
+    <param name="input_topic"  value="$(arg input_topic)"/>
+    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="max_points_per_publish" value="$(arg max_points_per_publish)"/>
+    <param name="window_sec" value="$(arg window_sec)"/>
+
+    <param name="angle_deg"  value="$(arg angle_deg)"/>
+    <param name="thickness"  value="$(arg thickness)"/>
+    <param name="min_range"  value="$(arg min_range)"/>
+    <param name="max_range"  value="$(arg max_range)"/>
+    <param name="front_only" value="$(arg front_only)"/>
+
+    <param name="decimation" value="$(arg decimation)"/>
+    <param name="keep_prob"  value="$(arg keep_prob)"/>
+    <param name="ring_len"   value="$(arg ring_len)"/>
+    <param name="seed"       value="$(arg seed)"/>
+  </node>
+</launch>
