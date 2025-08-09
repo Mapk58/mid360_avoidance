@@ -22,7 +22,7 @@
   <arg name="ring_len"    default="200000"/>
   <arg name="seed"        default="42"/>
 
-  <node pkg="mid360_avoidance" type="mid360_avoidance_node" name="mid360_avoidance" output="screen">
+  <node pkg="mid360_avoidance" type="livox_plane_filter" name="mid360_avoidance" output="screen">
     <remap from="~filtered" to="$(arg output_topic)"/>
     <param name="input_topic"  value="$(arg input_topic)"/>
     <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
