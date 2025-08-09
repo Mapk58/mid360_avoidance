@@ -1,0 +1,91 @@
+<launch>
+  <!-- ======== Filter params ======== -->
+  <!-- Topics -->
+  <arg name="input_topic"  default="/livox/lidar"/>
+  <arg name="output_topic" default="~/filtered"/>
+
+  <!-- Publishing -->
+  <arg name="publish_rate_hz" default="5.0"/>
+  <arg name="frame_id"        default="body"/>
+  <arg name="max_points_per_publish" default="120000"/>
+  <arg name="window_sec"      default="0.0"/>
+
+  <!-- Geometry / filters -->
+  <arg name="angle_deg"   default="-11.0"/>
+  <arg name="thickness"   default="0.1"/>
+  <arg name="min_range"   default="0.3"/>
+  <arg name="max_range"   default="15.0"/>
+  <arg name="front_only"  default="true"/>
+
+  <!-- Random ring subsample -->
+  <arg name="decimation"  default="15"/>     <!-- keep_prob by default = 1/decimation -->
+  <arg name="keep_prob"   default="-1.0"/>   <!-- less than zero => will use 1/decimation -->
+  <arg name="ring_len"    default="200000"/>
+  <arg name="seed"        default="42"/>
+
+
+  <!-- ======== Avoidance params ======== -->
+  <!-- I/O -->
+  <arg name="input_topic"  default="/mid360_avoidance/filtered"/>
+  <arg name="output_topic" default="/mid360_avoidance/avoid_vec"/>
+
+  <!-- Core -->
+  <arg name="sectors"      default="9"/>
+  <arg name="k_nearest"    default="3"/>
+  <arg name="fov_deg"      default="180.0"/>
+  <arg name="d_safe"       default="2.0"/>
+  <arg name="beta"         default="2.0"/>
+  <arg name="max_avoid"    default="1.0"/>
+  <arg name="ema_alpha"    default="0.3"/>
+  <arg name="publish_rate_hz" default="20.0"/>
+  <arg name="frame_id"     default="body"/>
+
+  <!-- Debug RViz -->
+  <arg name="debug_enable"   default="true"/>
+  <arg name="debug_scale"    default="1.0"/>   <!-- meters per unit -->
+  <arg name="debug_alpha"    default="0.9"/>
+  <arg name="debug_lifetime" default="0.2"/>
+  <arg name="debug_ns"       default="sector_avoid"/>
+
+  <!-- ======== Filter node ======== -->
+  <node pkg="mid360_avoidance" type="livox_plane_filter" name="mid360_avoidance" output="screen">
+    <remap from="~filtered" to="$(arg output_topic)"/>
+    <param name="input_topic"  value="$(arg input_topic)"/>
+    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="max_points_per_publish" value="$(arg max_points_per_publish)"/>
+    <param name="window_sec" value="$(arg window_sec)"/>
+
+    <param name="angle_deg"  value="$(arg angle_deg)"/>
+    <param name="thickness"  value="$(arg thickness)"/>
+    <param name="min_range"  value="$(arg min_range)"/>
+    <param name="max_range"  value="$(arg max_range)"/>
+    <param name="front_only" value="$(arg front_only)"/>
+
+    <param name="decimation" value="$(arg decimation)"/>
+    <param name="keep_prob"  value="$(arg keep_prob)"/>
+    <param name="ring_len"   value="$(arg ring_len)"/>
+    <param name="seed"       value="$(arg seed)"/>
+  </node>
+
+  <!-- ======== Avoidance node ======== -->
+  <node pkg="mid360_avoidance" type="sector_avoidance" name="sector_avoidance" output="screen">
+    <param name="input_topic"  value="$(arg input_topic)"/>
+    <param name="output_topic" value="$(arg output_topic)"/>
+    <param name="sectors"      value="$(arg sectors)"/>
+    <param name="k_nearest"    value="$(arg k_nearest)"/>
+    <param name="fov_deg"      value="$(arg fov_deg)"/>
+    <param name="d_safe"       value="$(arg d_safe)"/>
+    <param name="beta"         value="$(arg beta)"/>
+    <param name="max_avoid"    value="$(arg max_avoid)"/>
+    <param name="ema_alpha"    value="$(arg ema_alpha)"/>
+    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
+    <param name="frame_id"     value="$(arg frame_id)"/>
+
+    <param name="debug_enable"   value="$(arg debug_enable)"/>
+    <param name="debug_scale"    value="$(arg debug_scale)"/>
+    <param name="debug_alpha"    value="$(arg debug_alpha)"/>
+    <param name="debug_lifetime" value="$(arg debug_lifetime)"/>
+    <param name="debug_ns"       value="$(arg debug_ns)"/>
+  </node>
+</launch>
