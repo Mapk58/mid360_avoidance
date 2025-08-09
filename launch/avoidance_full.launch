@@ -1,12 +1,12 @@
 <launch>
   <!-- ======== Filter params ======== -->
   <!-- Topics -->
-  <arg name="input_topic"  default="/livox/lidar"/>
-  <arg name="output_topic" default="~/filtered"/>
+  <arg name="filter_input_topic"  default="/livox/lidar"/>
+  <arg name="filter_output_topic" default="~/filtered"/>
 
   <!-- Publishing -->
-  <arg name="publish_rate_hz" default="5.0"/>
-  <arg name="frame_id"        default="body"/>
+  <arg name="filter_publish_rate_hz" default="5.0"/>
+  <arg name="filter_frame_id"        default="body"/>
   <arg name="max_points_per_publish" default="120000"/>
   <arg name="window_sec"      default="0.0"/>
 
@@ -26,8 +26,8 @@
 
   <!-- ======== Avoidance params ======== -->
   <!-- I/O -->
-  <arg name="input_topic"  default="/mid360_avoidance/filtered"/>
-  <arg name="output_topic" default="/mid360_avoidance/avoid_vec"/>
+  <arg name="avoidance_input_topic"  default="/mid360_avoidance/filtered"/>
+  <arg name="avoidance_output_topic" default="/mid360_avoidance/avoid_vec"/>
 
   <!-- Core -->
   <arg name="sectors"      default="9"/>
@@ -37,8 +37,8 @@
   <arg name="beta"         default="2.0"/>
   <arg name="max_avoid"    default="1.0"/>
   <arg name="ema_alpha"    default="0.3"/>
-  <arg name="publish_rate_hz" default="20.0"/>
-  <arg name="frame_id"     default="body"/>
+  <arg name="avoidance_publish_rate_hz" default="20.0"/>
+  <arg name="avoidance_frame_id"     default="body"/>
 
   <!-- Debug RViz -->
   <arg name="debug_enable"   default="true"/>
@@ -49,10 +49,10 @@
 
   <!-- ======== Filter node ======== -->
   <node pkg="mid360_avoidance" type="livox_plane_filter" name="mid360_avoidance" output="screen">
-    <remap from="~filtered" to="$(arg output_topic)"/>
-    <param name="input_topic"  value="$(arg input_topic)"/>
-    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
-    <param name="frame_id" value="$(arg frame_id)"/>
+    <remap from="~filtered" to="$(arg filter_output_topic)"/>
+    <param name="input_topic"  value="$(arg filter_input_topic)"/>
+    <param name="publish_rate_hz" value="$(arg filter_publish_rate_hz)"/>
+    <param name="frame_id" value="$(arg filter_frame_id)"/>
     <param name="max_points_per_publish" value="$(arg max_points_per_publish)"/>
     <param name="window_sec" value="$(arg window_sec)"/>
 
@@ -70,8 +70,8 @@
 
   <!-- ======== Avoidance node ======== -->
   <node pkg="mid360_avoidance" type="sector_avoidance" name="sector_avoidance" output="screen">
-    <param name="input_topic"  value="$(arg input_topic)"/>
-    <param name="output_topic" value="$(arg output_topic)"/>
+    <param name="input_topic"  value="$(arg avoidance_input_topic)"/>
+    <param name="output_topic" value="$(arg avoidance_output_topic)"/>
     <param name="sectors"      value="$(arg sectors)"/>
     <param name="k_nearest"    value="$(arg k_nearest)"/>
     <param name="fov_deg"      value="$(arg fov_deg)"/>
@@ -79,8 +79,8 @@
     <param name="beta"         value="$(arg beta)"/>
     <param name="max_avoid"    value="$(arg max_avoid)"/>
     <param name="ema_alpha"    value="$(arg ema_alpha)"/>
-    <param name="publish_rate_hz" value="$(arg publish_rate_hz)"/>
-    <param name="frame_id"     value="$(arg frame_id)"/>
+    <param name="publish_rate_hz" value="$(arg avoidance_publish_rate_hz)"/>
+    <param name="frame_id"     value="$(arg avoidance_frame_id)"/>
 
     <param name="debug_enable"   value="$(arg debug_enable)"/>
     <param name="debug_scale"    value="$(arg debug_scale)"/>
